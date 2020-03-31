@@ -55,9 +55,7 @@ jobs:
       working-directory: code
       if: runner.os == 'Linux'
     - name: Enable apk builds
-      run: |
-        flutter doctor --android-licenses
-        flutter config --enable-android-embedding-v2
+      run: flutter config --enable-android-embedding-v2
       working-directory: code
       if: runner.os == 'Windows'
 
