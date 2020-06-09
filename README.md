@@ -1,6 +1,6 @@
 # ResponsiveTemplate
 
-Flutter Responsive Design Template
+A new Flutter project.
 
 ## Getting Started
 
