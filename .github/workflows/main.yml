@@ -16,24 +16,23 @@ jobs:
     steps:
     # Set up Flutter and add it to the path.
     - name: Clone Flutter repository with master channel.
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.2.0
       with:
         repository: 'flutter/flutter'
-        ref: 'master'
-        path: 'flutter'
-        fetch-depth: 0
+        path: "flutter"
+        fetch-depth: 1
     - name: Add Flutter to the PATH for Unix.
       run: echo "::add-path::/$GITHUB_WORKSPACE/flutter/bin"
-      if: runner.os != 'Windows'
+      if: runner.os != "Windows"
     - name: Add Flutter to the PATH for Windows.
       run: echo "::add-path::${env:GITHUB_WORKSPACE}\flutter\bin"
-      if: runner.os == 'Windows'
+      if: runner.os == "Windows"
     - name: Run Flutter doctor.
       run: flutter doctor -v
     - name: Clone this repository.
-      uses: actions/checkout@v2
+      uses: actions/checkout@v2.2.0
       with:
-        path: 'code'
+        path: "code"
     - name: Get packages for the Flutter project.
       run: flutter pub get
       working-directory: code
@@ -49,20 +48,20 @@ jobs:
     - name: Enable Windows builds
       run: flutter config --enable-windows-desktop
       working-directory: code
-      if: runner.os == 'Windows'
+      if: runner.os == "Windows"
     - name: Enable Linux builds
       run: flutter config --enable-linux-desktop
       working-directory: code
-      if: runner.os == 'Linux'
+      if: runner.os == "Linux"
     - name: Enable apk builds
       run: flutter config --enable-android-embedding-v2
       working-directory: code
-      if: runner.os == 'Windows'
+      if: runner.os == "Windows"
 
     # Start Builds
     - name: Build Windows Version
       run: flutter build windows --tree-shake-icons -v
-      if: runner.os == 'Windows'
+      if: runner.os == "Windows"
       working-directory: code
 
     - name: Build MacOS Version
@@ -72,7 +71,7 @@ jobs:
       continue-on-error: true
     - name: Upload MacOS Desktop App
       if: runner.os == 'macOS'
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with:
         # Artifact name
         name: MacOS App
@@ -91,7 +90,7 @@ jobs:
       continue-on-error: true
     - name: Upload IOS App
       if: runner.os == 'macOS'
-      uses: actions/upload-artifact@v1.0.0
+      uses: actions/upload-artifact@v2
       with:
         # Artifact name
         name: IOS App
@@ -99,7 +98,7 @@ jobs:
         path: code/build/ios/iphonesimulator/Runner.app
 
     - name: Build Web version and Deploy
-      if: runner.os == 'Linux'
+      if: runner.os == "Linux"
       working-directory: code
       run: |
         flutter build web --csp --tree-shake-icons -v
@@ -114,8 +113,8 @@ jobs:
         git commit -m "update"
         git push origin master -f
     - name: Upload Web Build Outputs
-      if: runner.os == 'Linux'
-      uses: actions/upload-artifact@v1.0.0
+      if: runner.os == "Linux"
+      uses: actions/upload-artifact@v2
       with:
         # Artifact name
         name: Web
@@ -123,12 +122,12 @@ jobs:
         path: code/build/web/
 
     - name: Android app
-      if: runner.os == 'Windows'
+      if: runner.os == "Windows"
       run: flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi --obfuscate --split-debug-info --tree-shake-icons -v
       working-directory: code
     - name: Upload Apks
-      if: runner.os == 'Windows'
-      uses: actions/upload-artifact@v1.0.0
+      if: runner.os == "Windows"
+      uses: actions/upload-artifact@v2
       with:
         # Artifact name
         name: Apks
